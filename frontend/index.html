@@ -10,7 +10,9 @@
             <h1>Welcome, {{ session['username'] }}</h1>
             <form method="POST" action="/add_note">
                 <input type="text" name="note" placeholder="Add a new note">
+                <form method="POST" action="/add_task"></form>
                 <button type="submit">Add</button>
+            </form>
             </form>
             <ul>
                 {% for note in notes %}
