@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- styles -->
+    <link rel="stylesheet" href="../static/style.css" />
+    <!-- Caminho para o script -->
+    <title>Notes</title>
+  </head>
+  <body>
+    <div>
+      <form class="formulario" id="formulario">
+        <h1>Anote suas notas!</h1>
+
+        <input
+          type="text"
+          id="todo"
+          name="todo"
+          placeholder="Nova nota"
+          required
+        />
+
+        <button class="button" type="submit">Enviar</button>
+      </form>
+      {%for todo in todos%}
+      <div class="todoItem" onclick="deleteTodo({{todo.id}})">
+        {{todo.text}}
+      </div>
+      {%endfor%}
+    </div>
+    <script>
+      document
+        .getElementById("formulario")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const text = document.getElementById("todo").value;
+          const token = localStorage.getItem("token");
+
+          try {
+            const response = await fetch("/add/todo", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+              },
+              body: JSON.stringify({ text }),
+            });
+
+            const data = await response.json();
+            window.location.href = "/notes";
+          } catch (error) {
+            console.error("Erro: ", error);
+          }
+        });
+
+      async function deleteTodo(id) {
+        const token = localStorage.getItem("token");
+        id = parseInt(id);
+        try {
+          const response = await fetch("/delete/todo", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+            body: JSON.stringify({ id }),
+          });
+          const data = await response.json();
+          window.location.href = "/notes";
+        } catch (error) {
+          console.error("Erro: ", error);
+        }
+      }
+    </script>
+  </body>
+</html>

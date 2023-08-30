@@ -1,0 +1,6 @@
+psycopg2
+Flask
+Flask-SQLAlchemy
+PyJWT
+python-decouple
+pydantic[email]
